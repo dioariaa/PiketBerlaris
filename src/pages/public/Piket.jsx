@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { CalendarDays, AlertCircle } from 'lucide-react'
 import Layout from '../../components/Layout'
 import TaskCard from '../../components/TaskCard'
 import PhotoPanel from '../../components/PhotoPanel'
@@ -25,7 +26,6 @@ export default function Piket() {
 
   const staffById = useMemo(() => Object.fromEntries(staff.map((s) => [s.id, s])), [staff])
 
-  // Assignment hari ini: task_id -> staff_id (dari schedule)
   const todayAssignments = useMemo(() => {
     const map = {}
     for (const task of tasks) {
@@ -35,7 +35,6 @@ export default function Piket() {
     return map
   }, [tasks, scheduleMap, dayIndex])
 
-  // Tampilkan semua tugas yang di-assign hari ini (tanpa filter per staff)
   const visibleTasks = tasks.filter((t) => todayAssignments[t.id])
   const doneCount = visibleTasks.filter((t) => checkMap[t.id]).length
 
@@ -49,7 +48,6 @@ export default function Piket() {
 
   const loading = staffLoading || tasksLoading || scheduleLoading
 
-  // Centang atas nama staff yang di-assign di schedule
   async function handleToggle(taskId) {
     const staffId = todayAssignments[taskId]
     if (!staffId) return
@@ -57,40 +55,46 @@ export default function Piket() {
   }
 
   return (
-    <Layout variant="public">
-      {/* Header */}
-      <div className="bg-[#3E2723] px-4 pt-6 pb-5 rounded-b-3xl">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-[18px] font-bold text-white">☕ Berlaris Piket</h1>
-            <p className="text-[12px] text-[#D7CCC8]">{formatFullDateID(jakartaNow())}</p>
+    <Layout variant="public" title="Checklist Hari Ini">
+      <div className="p-4 lg:p-8">
+        {/* Header card */}
+        <div
+          className="bg-[var(--c-surface)] rounded-[var(--radius)] border border-[var(--c-border)] p-5 mb-6"
+          style={{ boxShadow: 'var(--shadow-sm)' }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-[18px] font-bold text-[var(--c-text)] lg:hidden">Checklist Hari Ini</h1>
+              <p className="text-[13px] text-[var(--c-text-secondary)] mt-0.5">{formatFullDateID(jakartaNow())}</p>
+            </div>
+            <Link
+              to="/jadwal"
+              className="h-9 px-3.5 rounded-[var(--radius)] border border-[var(--c-border)] text-[var(--c-text-secondary)] text-[12px] font-semibold flex items-center gap-1.5 hover:border-[var(--c-primary)] hover:text-[var(--c-primary)] transition-colors cursor-pointer"
+            >
+              <CalendarDays size={14} strokeWidth={2} />
+              Jadwal
+            </Link>
           </div>
-          <Link
-            to="/jadwal"
-            className="h-9 px-3 rounded-lg bg-white/15 text-white text-[12px] font-semibold flex items-center"
-          >
-            Jadwal Minggu Ini
-          </Link>
+          <ProgressBar done={doneCount} total={visibleTasks.length} />
         </div>
-        <ProgressBar done={doneCount} total={visibleTasks.length} />
-      </div>
 
-      <div className="px-4 pt-4">
         {(checksError || photoError) && (
-          <div className="mb-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-[12px] px-3 py-2">
+          <div className="mb-4 rounded-[var(--radius)] bg-[var(--c-danger)]/5 border border-[var(--c-danger)]/20 text-[var(--c-danger)] text-[13px] px-4 py-3 flex items-start gap-2">
+            <AlertCircle size={16} className="shrink-0 mt-0.5" />
             {checksError || photoError}
           </div>
         )}
 
-        <h2 className="text-[15px] font-bold text-[#333333] mb-3">Checklist Hari Ini</h2>
-
-        {loading && <p className="text-center text-[#999999] text-sm py-8">Memuat tugas...</p>}
+        {loading && <p className="text-center text-[var(--c-text-muted)] text-sm py-12">Memuat tugas...</p>}
 
         {!loading && visibleTasks.length === 0 && (
-          <div className="text-center py-10 bg-white rounded-xl border border-[#E8E8E8]">
-            <p className="text-3xl mb-2">🗓️</p>
-            <p className="text-[14px] text-[#666666]">Belum ada jadwal untuk hari ini.</p>
-            <p className="text-[12px] text-[#999999] mt-1">Hubungi manager untuk atur jadwal.</p>
+          <div
+            className="text-center py-12 bg-[var(--c-surface)] rounded-[var(--radius)] border border-[var(--c-border)]"
+            style={{ boxShadow: 'var(--shadow-sm)' }}
+          >
+            <CalendarDays size={40} className="mx-auto text-[var(--c-text-muted)] mb-3" strokeWidth={1.5} />
+            <p className="text-[14px] font-medium text-[var(--c-text-secondary)]">Belum ada jadwal untuk hari ini.</p>
+            <p className="text-[12px] text-[var(--c-text-muted)] mt-1">Hubungi manager untuk atur jadwal.</p>
           </div>
         )}
 
@@ -112,9 +116,9 @@ export default function Piket() {
           ) : null
         )}
 
-        {/* Foto Before/After — pool per tanggal, stacked */}
-        <h2 className="text-[15px] font-bold text-[#333333] mb-3 mt-6">Foto Before / After</h2>
-        <div className="flex flex-col gap-3">
+        {/* Photo Before/After */}
+        <h2 className="text-[15px] font-bold text-[var(--c-text)] mb-3 mt-6">Foto Before / After</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <PhotoPanel
             type="before"
             photos={photos.filter((p) => p.type === 'before')}
@@ -131,12 +135,14 @@ export default function Piket() {
           />
         </div>
 
-        {/* Catatan SOP */}
-        <div className="mt-5 mb-4 rounded-xl bg-[#FFF8E1] border border-[#FFE082] p-4">
-          <p className="text-[12px] font-bold text-[#8D6E00] mb-1.5">📌 Catatan SOP</p>
+        {/* SOP Note */}
+        <div className="mt-6 mb-4 rounded-[var(--radius)] bg-[var(--c-warning)]/8 border border-[var(--c-warning)]/25 p-4">
+          <p className="text-[12px] font-semibold text-[#8D6E00] mb-1.5 flex items-center gap-1.5">
+            <AlertCircle size={14} />
+            Catatan SOP
+          </p>
           <ul className="text-[12px] text-[#7A6200] space-y-1 list-disc pl-4">
             <li>Pastikan toilet kering, bersih dan wangi</li>
-      
           </ul>
         </div>
       </div>

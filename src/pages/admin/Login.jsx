@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Coffee, AlertCircle } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 
 export default function Login() {
@@ -24,38 +25,54 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center px-5">
-      <div className="w-full max-w-[380px] bg-white rounded-2xl border border-[#E8E8E8] p-6 shadow-sm">
-        <div className="text-center mb-6">
-          <div className="text-3xl mb-2">🔐</div>
-          <h1 className="text-[18px] font-bold text-[#3E2723]">Admin Berlaris Piket</h1>
-          <p className="text-[12px] text-[#999999] mt-1">Login untuk kelola jadwal &amp; rekap</p>
+    <div className="min-h-dvh bg-[var(--c-bg)] flex items-center justify-center px-5">
+      <div
+        className="w-full max-w-[400px] bg-[var(--c-surface)] rounded-[var(--radius)] border border-[var(--c-border)] p-8"
+        style={{ boxShadow: 'var(--shadow-md)' }}
+      >
+        <div className="text-center mb-8">
+          <div className="w-12 h-12 rounded-[var(--radius)] bg-[var(--c-primary)]/10 flex items-center justify-center mx-auto mb-4">
+            <Coffee size={24} className="text-[var(--c-primary)]" strokeWidth={2} />
+          </div>
+          <h1 className="text-[20px] font-bold text-[var(--c-text)]">Admin Berlaris Piket</h1>
+          <p className="text-[13px] text-[var(--c-text-muted)] mt-1">Login untuk kelola jadwal &amp; rekap</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            autoComplete="email"
-            className="w-full h-12 px-3.5 rounded-xl border border-[#E8E8E8] text-[14px] outline-none focus:border-[#795548]"
-          />
-          <input
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            autoComplete="current-password"
-            className="w-full h-12 px-3.5 rounded-xl border border-[#E8E8E8] text-[14px] outline-none focus:border-[#795548]"
-          />
-          {error && <p className="text-[12px] text-[#E74C3C] font-medium">{error}</p>}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-[12px] font-medium text-[var(--c-text-secondary)] mb-1.5">Email</label>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="admin@piket.com"
+              autoComplete="email"
+              className="w-full h-11 px-3.5 rounded-[var(--radius)] border border-[var(--c-border)] text-[14px] outline-none focus:border-[var(--c-primary)] focus:ring-2 focus:ring-[var(--c-primary)]/10 transition-all"
+            />
+          </div>
+          <div>
+            <label className="block text-[12px] font-medium text-[var(--c-text-secondary)] mb-1.5">Password</label>
+            <input
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Masukkan password"
+              autoComplete="current-password"
+              className="w-full h-11 px-3.5 rounded-[var(--radius)] border border-[var(--c-border)] text-[14px] outline-none focus:border-[var(--c-primary)] focus:ring-2 focus:ring-[var(--c-primary)]/10 transition-all"
+            />
+          </div>
+          {error && (
+            <div className="flex items-center gap-2 text-[12px] text-[var(--c-danger)] font-medium">
+              <AlertCircle size={14} />
+              {error}
+            </div>
+          )}
           <button
             type="submit"
             disabled={busy}
-            className="w-full h-12 rounded-xl bg-[#3E2723] text-white text-[14px] font-bold active:bg-[#5D4037] disabled:opacity-60"
+            className="w-full h-11 rounded-[var(--radius)] bg-[var(--c-primary)] text-white text-[14px] font-semibold hover:bg-[var(--c-secondary)] active:bg-[var(--c-secondary)] disabled:opacity-60 transition-colors cursor-pointer"
           >
             {busy ? 'Memproses...' : 'Masuk'}
           </button>

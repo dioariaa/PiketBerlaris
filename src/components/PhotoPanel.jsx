@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react'
+import { Camera, ImagePlus, X } from 'lucide-react'
 import { publicPhotoUrl } from '../hooks/usePhotos'
 import Lightbox from './Lightbox'
 
 export default function PhotoPanel({ type, photos, uploading, onUpload, onDelete }) {
-  // Dua input terpisah: dengan capture (buka kamera) dan tanpa capture (pilih dari galeri)
   const cameraRef = useRef(null)
   const galleryRef = useRef(null)
   const [viewUrl, setViewUrl] = useState(null)
@@ -18,8 +18,11 @@ export default function PhotoPanel({ type, photos, uploading, onUpload, onDelete
   }
 
   return (
-    <div className="flex-1 bg-white rounded-xl border border-[#E8E8E8] p-3.5 min-w-0">
-      <h3 className="text-[13px] font-bold text-[#333333] mb-2">{label}</h3>
+    <div
+      className="flex-1 bg-[var(--c-surface)] rounded-[var(--radius)] border border-[var(--c-border)] p-4 min-w-0"
+      style={{ boxShadow: 'var(--shadow-sm)' }}
+    >
+      <h3 className="text-[13px] font-semibold text-[var(--c-text)] mb-3">{label}</h3>
       <input
         ref={cameraRef}
         type="file"
@@ -41,40 +44,40 @@ export default function PhotoPanel({ type, photos, uploading, onUpload, onDelete
         <button
           onClick={() => cameraRef.current?.click()}
           disabled={uploading}
-          className="flex-1 h-[72px] rounded-lg border-2 border-dashed border-[#D7CCC8] bg-[#F7F2EE] flex flex-col items-center justify-center gap-0.5 text-[#5D4037] active:bg-[#EFEBE9] disabled:opacity-50"
+          className="flex-1 h-[64px] rounded-[var(--radius)] border border-dashed border-[var(--c-border)] bg-[var(--c-bg)] flex flex-col items-center justify-center gap-1 text-[var(--c-text-secondary)] hover:border-[var(--c-primary)] hover:text-[var(--c-primary)] active:bg-[var(--c-primary)]/5 disabled:opacity-50 transition-colors cursor-pointer"
         >
-          <span className="text-xl leading-none">📷</span>
-          <span className="text-[11px] font-semibold">{uploading ? 'Mengupload...' : 'Kamera'}</span>
+          <Camera size={20} strokeWidth={1.75} />
+          <span className="text-[11px] font-medium">{uploading ? 'Mengupload...' : 'Kamera'}</span>
         </button>
         <button
           onClick={() => galleryRef.current?.click()}
           disabled={uploading}
-          className="flex-1 h-[72px] rounded-lg border-2 border-dashed border-[#D7CCC8] bg-[#F7F2EE] flex flex-col items-center justify-center gap-0.5 text-[#5D4037] active:bg-[#EFEBE9] disabled:opacity-50"
+          className="flex-1 h-[64px] rounded-[var(--radius)] border border-dashed border-[var(--c-border)] bg-[var(--c-bg)] flex flex-col items-center justify-center gap-1 text-[var(--c-text-secondary)] hover:border-[var(--c-primary)] hover:text-[var(--c-primary)] active:bg-[var(--c-primary)]/5 disabled:opacity-50 transition-colors cursor-pointer"
         >
-          <span className="text-xl leading-none">🖼️</span>
-          <span className="text-[11px] font-semibold">{uploading ? 'Mengupload...' : 'Galeri'}</span>
+          <ImagePlus size={20} strokeWidth={1.75} />
+          <span className="text-[11px] font-medium">{uploading ? 'Mengupload...' : 'Galeri'}</span>
         </button>
       </div>
 
       {photos.length > 0 && (
-        <div className="grid grid-cols-3 gap-1.5 mt-2.5">
+        <div className="grid grid-cols-3 gap-2 mt-3">
           {photos.map((p) => {
             const url = publicPhotoUrl(p.storage_path)
             return (
-              <div key={p.id} className="relative aspect-square">
+              <div key={p.id} className="relative aspect-square group">
                 <img
                   src={url}
                   alt={label}
-                  className="w-full h-full object-cover rounded-lg"
+                  className="w-full h-full object-cover rounded-lg cursor-pointer"
                   onClick={() => setViewUrl(url)}
                 />
                 {onDelete && (
                   <button
                     onClick={() => onDelete(p)}
                     aria-label="Hapus foto"
-                    className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-[#E74C3C] text-white text-[11px] font-bold flex items-center justify-center shadow"
+                    className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-[var(--c-danger)] text-white flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                   >
-                    ✕
+                    <X size={12} strokeWidth={3} />
                   </button>
                 )}
               </div>

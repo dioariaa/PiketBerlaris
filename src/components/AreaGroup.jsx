@@ -6,10 +6,10 @@ export const AREA_LABELS = {
 }
 
 export const AREA_COLORS = {
-  lt1: '#5D4037',
-  lt2: '#795548',
-  office: '#A1887F',
-  all: '#D7CCC8',
+  lt1: '#6F4E37',
+  lt2: '#8B5E3C',
+  office: '#C89B6D',
+  all: '#9CA3AF',
 }
 
 export const AREA_ORDER = ['lt1', 'lt2', 'office', 'all']
@@ -17,11 +17,11 @@ export const AREA_ORDER = ['lt1', 'lt2', 'office', 'all']
 export default function AreaGroup({ area, children }) {
   return (
     <div className="mb-5">
-      <div className="flex items-center gap-2 mb-2 px-1">
-        <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: AREA_COLORS[area] }} />
+      <div className="flex items-center gap-2 mb-2.5 px-1">
+        <span className="w-2 h-2 rounded-full shrink-0" style={{ background: AREA_COLORS[area] }} />
         <h2
-          className="text-[11px] font-bold uppercase"
-          style={{ color: AREA_COLORS[area] === '#D7CCC8' ? '#A1887F' : AREA_COLORS[area], letterSpacing: '0.5px' }}
+          className="text-[12px] font-semibold uppercase tracking-wider"
+          style={{ color: AREA_COLORS[area] }}
         >
           {AREA_LABELS[area]}
         </h2>
