@@ -136,7 +136,7 @@ export default function Piket() {
           <p className="text-[12px] font-bold text-[#8D6E00] mb-1.5">📌 Catatan SOP</p>
           <ul className="text-[12px] text-[#7A6200] space-y-1 list-disc pl-4">
             <li>Pastikan toilet kering, bersih dan wangi</li>
-            <li>Kirim foto before &amp; after ke grup service</li>
+      
           </ul>
         </div>
       </div>
